@@ -1,0 +1,57 @@
+{{template "base"}}
+<style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+        overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+        font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-0lax{border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<div class="container">
+    <div class="row" align="center">
+        <h1>Start and Stop Monitoring</h1><br>
+        <table class="tg">
+            <thead>
+            <tr>
+                <th class="tg-0lax" colspan="4">Current Setting</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="tg-0lax">Monitoring status: {{ if and (eq .MonitorIsOn true) }}
+                        On
+                    {{ else }}
+                        Off
+                    {{ end }}</td>
+                <td class="tg-0lax">Interval: {{.Interval}} minute(s)</td>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+<br>
+<div class="container">
+    <div class="row" align="left">
+<p>
+        1. Submit a number of minute(s) to start monitor your URL.<br>
+        2. Submit "0" to stop the monitoring.<br>
+        3. Re-submit a new number to change the interval timing.<br>
+        <form method="post">
+            <label for ="interval">Set Interval Timing:</label>
+            <input type="text" name="interval" placeholder="e.g key 10 for 10mins interval">
+            <input type="submit">
+
+        </form>
+        </p>
+    </div>
+
+    <a href="/dashboard">User Dashboard</a><br>
+    <a href="/logout">Log Out</a>
+</div>
+</body>
+</html>
+

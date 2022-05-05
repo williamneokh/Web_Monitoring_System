@@ -1,0 +1,57 @@
+{{template "base"}}
+<style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+        overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+        font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-0lax{border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<div class="container">
+    <div class="row" align="center">
+        <h1>Welcome to Dashboard</h1>
+
+        {{if .First}}
+            <h2>Good day, {{.First}} {{.Last}}!</h2>
+                <p style="color:red;font-size:30px;">In order to receive notification, please join <br><a href ="https://t.me/+29ccOLwGxdAwZWJl">https://t.me/+29ccOLwGxdAwZWJl</a></p>
+            <table class="tg">
+                <thead>
+                <tr>
+                    <th class="tg-0lax" colspan="4">Current Setting</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="tg-0lax">Monitoring status: {{ if and (eq .MonitorIsOn true) }}
+                            On
+                        {{ else }}
+                            Off
+                        {{ end }}</td>
+                    <td class="tg-0lax">Interval: {{.Interval}} minute(s)</td>
+
+                </tr>
+                </tbody>
+            </table>
+
+        {{end}}
+    </div>
+
+    <a href="/viewmonitoredurllist">View all registered URL</a><br>
+    <a href="/addnewurl">Add New URL</a><br>
+    <a href="/deleteurl">Delete URL</a><br>
+    <a href="/startstopmonitoring">Start or Stop Monitoring</a><br>
+    <a href="/allrecordeddata">View All Monitored Result</a><br>
+    <a href="/printlatest">Show only the latest URL check</a><br>
+    <a href="/individualurlperformance">URL Performance report</a><br>
+    <a href="/logout">Log Out</a><br>
+</div>
+
+
+
+
+
+
+
+
+    </body>
+  </html>
