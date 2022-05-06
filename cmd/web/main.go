@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	_ "image/gif"
-	_ "image/png"
+	"github.com/williamneokh/WebMonitoringSystem/handler"
 	"net/http"
-	"williamGoInAction1/handler"
 )
 
 func init() {

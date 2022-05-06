@@ -4,9 +4,32 @@
     <div class="row" align="center">
         <h1>Latest URL check result</h1><br>
 
-        {{range .}}
-            <li>{{.}}</li>
-        {{end}}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+
+                <th>#</th>
+                <th>TIME STAMP</th>
+                <th>URL</th>
+                <th>STATUS</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            {{range .}}
+
+                <tr>
+                    <td>{{.IndexNum}}</td>
+                    <td>{{.Time}}</td>
+                    <td>{{.Url}}</td>
+                    <td>{{.Status}}</td>
+                </tr>
+
+            {{end}}
+
+            </tbody>
+        </table>
     </div>
 
     <a href="/dashboard">User Dashboard</a><br>

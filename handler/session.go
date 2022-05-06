@@ -2,8 +2,8 @@ package handler
 
 import (
 	uuid "github.com/satori/go.uuid"
+	"github.com/williamneokh/WebMonitoringSystem/dataStructure"
 	"net/http"
-	"williamGoInAction1/dataStructure"
 )
 
 func GetUser(res http.ResponseWriter, req *http.Request) dataStructure.User {

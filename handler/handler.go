@@ -3,25 +3,23 @@ package handler
 import (
 	"fmt"
 	uuid "github.com/satori/go.uuid"
+	"github.com/williamneokh/WebMonitoringSystem/config"
+	"github.com/williamneokh/WebMonitoringSystem/dataStructure"
+	"github.com/williamneokh/WebMonitoringSystem/preLoadData"
 	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
 	"strconv"
 	"sync"
 	"time"
-	"williamGoInAction1/config"
-	"williamGoInAction1/dataStructure"
-	"williamGoInAction1/preLoadData"
 )
 
 var tpl *template.Template
 var mapUsers = map[string]dataStructure.User{}
 var mapSessions = map[string]string{}
 
-//myUser = dataStructure.User{username, bPassword, firstname, lastname}
-//mapUsers[username] = myUser
-
 func Initial() {
+
 	tpl = template.Must(template.ParseGlob("templates/*.gohtml"))
 	bPassword, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.MinCost) //should not appear after go action 1
 	mapUsers["admin"] = dataStructure.User{"admin", bPassword, "admin", "admin", "0", false, false}
@@ -34,7 +32,7 @@ func Index(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	myUser := GetUser(res, req)
-	tpl.ExecuteTemplate(res, "index.gohtml", myUser)
+	_ = tpl.ExecuteTemplate(res, "index.gohtml", myUser)
 }
 
 func Signup(res http.ResponseWriter, req *http.Request) {
@@ -54,7 +52,7 @@ func Signup(res http.ResponseWriter, req *http.Request) {
 		if username != "" {
 			// check if username exist/ taken
 			if _, ok := mapUsers[username]; ok {
-				http.Error(res, "Username already taken", http.StatusForbidden)
+				_ = tpl.ExecuteTemplate(res, "errorresponse.gohtml", "User Name already taken!")
 				return
 			}
 			// create session
@@ -102,7 +100,7 @@ func Login(res http.ResponseWriter, req *http.Request) {
 		// Matching of password entered
 		err := bcrypt.CompareHashAndPassword(myUser.Password, []byte(password))
 		if err != nil {
-			http.Error(res, "Username and/or password do not match", http.StatusForbidden)
+			_ = tpl.ExecuteTemplate(res, "errorresponse.gohtml", "Username and/or password do not match")
 			return
 		}
 		// create session
@@ -145,11 +143,7 @@ func Dashboard(res http.ResponseWriter, req *http.Request) {
 		http.Redirect(res, req, "/", http.StatusSeeOther)
 		return
 	}
-	//if myUser.MonitorIsOn == false {
-	//	if myUser.Interval != "0" {
-	//		StarMonitoring(res, req)
-	//	}
-	//}
+
 	if myUser.MonitorIsOn == true {
 		if myUser.Interval != "0" {
 			if myUser.MonitorIsRunning == false {
@@ -186,7 +180,7 @@ func AddNewUrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if req.Method == http.MethodPost {
-		// get form values
+
 		username := req.FormValue("username")
 		urladdress := req.FormValue("urladdress")
 
@@ -203,7 +197,7 @@ func AddNewUrl(res http.ResponseWriter, req *http.Request) {
 		} else {
 			for _, url := range dataStructure.UserWebLinkMap[username] {
 				if urladdress == url {
-					http.Error(res, "Address is duplicate!", http.StatusForbidden)
+					_ = tpl.ExecuteTemplate(res, "errorresponse.gohtml", "Address is duplicated!")
 					return
 				}
 			}
@@ -227,6 +221,12 @@ func DeleteUrl(res http.ResponseWriter, req *http.Request) {
 	}
 
 	if req.Method == http.MethodPost {
+
+		if myUser.MonitorIsOn == true {
+
+			_ = tpl.ExecuteTemplate(res, "errorresponse.gohtml", "Please stop monitoring first before deleting URL.")
+			return
+		}
 
 		urladdress := req.FormValue("urladdress")
 
@@ -275,7 +275,13 @@ func StartStopMonitoring(res http.ResponseWriter, req *http.Request) {
 		}
 
 		if _, ok := mapUsers[myUser.Username]; !ok {
-			http.Error(res, "Username not found", http.StatusForbidden)
+			_ = tpl.ExecuteTemplate(res, "errorresponse.gohtml", "User Name not found")
+			return
+		}
+
+		if len(dataStructure.UserWebLinkMap[myUser.Username]) < 1 {
+
+			_ = tpl.ExecuteTemplate(res, "errorresponse.gohtml", "No available url to start monitor, Please add URL first.")
 			return
 		}
 		if interval == "0" {
@@ -354,53 +360,3 @@ func checkLink(username string, address string, group *sync.WaitGroup) {
 
 	}
 }
-
-//func Push(username string, time string, address string, status string) error {
-//
-//	currentNode := dataStructure.UserRecordMap[username][address]
-//	newNode := &dataStructure.Node{time, status, nil}
-//
-//	if currentNode.Top == nil {
-//
-//		currentNode.Top = newNode
-//
-//	} else {
-//		tempNode := currentNode.Top
-//		currentNode.Top = newNode
-//		newNode.Next = tempNode
-//	}
-//	currentNode.Size++
-//	for _, url := range dataStructure.UserUrlRecord[username] {
-//		if address == url {
-//
-//			return nil
-//		}
-//
-//	}
-//
-//	dataStructure.UserUrlRecord[username] = append(dataStructure.UserUrlRecord[username], address)
-//
-//	return nil
-//
-//}
-//
-//func PrintAllData(res http.ResponseWriter, req *http.Request) {
-//	myUser := GetUser(res, req)
-//	fmt.Println(myUser.Username)
-//	if !AlreadyLoggedIn(req) {
-//		http.Redirect(res, req, "/", http.StatusSeeOther)
-//		return
-//	}
-//	for _, url := range dataStructure.UserUrlRecord[myUser.Username] {
-//		fmt.Println(url)
-//
-//		currentNode := dataStructure.UserRecordMap[myUser.Username][url].Top
-//
-//		for currentNode != nil {
-//			//fmt.Println("Is empty!")
-//			fmt.Printf("TimeStamp: %v, URL: %v, Status: %v\n", currentNode.Time, url, currentNode.Status)
-//
-//		}
-//
-//	}
-//}

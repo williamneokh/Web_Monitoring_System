@@ -1,6 +1,6 @@
 package preLoadData
 
-import "williamGoInAction1/dataStructure"
+import "github.com/williamneokh/WebMonitoringSystem/dataStructure"
 
 func LoadData() {
 	webLink := []string{

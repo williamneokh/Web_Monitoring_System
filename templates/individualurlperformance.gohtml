@@ -1,15 +1,42 @@
 {{template "base"}}
+
 {{if .}}
     <div class="container">
         <div class="row" align="center">
             <h1>URL Performance Result</h1><br>
 
+            <!-- CSS Code: Place this code in the document's head (between the 'head' tags) -->
+
+
+            <!-- HTML Code: Place this code in the document's body (between the 'body' tags) where the table should appear -->
+            <table class="table table-striped">
+                <thead>
+                <tr>
+<th>#</th>
+                    <th>URL</th>
+                    <th>UPTIME</th>
+
+                </tr>
+                </thead>
+                <tbody>
 
                 {{range .}}
-            <li> {{.Url}} - Uptime:{{.Percent}}%</li>
 
-            {{end}}
+                <tr>
+                    <td>{{.IndexNum}}</td>
+                    <td>{{.Url}}</td>
+                    <td>{{.Percent}}%</td>
+
+                </tr>
+
+                {{end}}
+
+                </tbody>
+            </table>
+
         </div>
+
+
 
         <a href="/dashboard">User Dashboard</a><br>
         <a href="/logout">Log Out</a>
