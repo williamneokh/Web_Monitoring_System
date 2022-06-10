@@ -8,7 +8,7 @@ if the server ever went down.
 Having that in my mind, I decided to use this idea to be my Goschool's project. Not only it served it purpose and also will
 be a great tool for my work or personal usage.
 
-In this application, I adopt telegram as the notification channel instead of local sms service to keep the cost further reduce.
+In this application, I adopt telegram as the notification channel instead of local sms service to keep the cost as good as free.
 
 
 Application features:
